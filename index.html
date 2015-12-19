@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="icon" type="image/png" href="images/logo.ico" />
+	<link rel="stylesheet" type="text/css" href="style/style.css"/>
+	<link rel="stylesheet" type="text/css" href="style/jquery-ui.min.css"/>
+	<link rel="stylesheet" tyle="text/css" href="style/font-awesome.min.css">
+	<link rel="stylesheet" tyle="text/css" href="style/open-sans-font.css">
+	<link rel="stylesheet" tyle="text/css" href="style/comfortaa-font.css">
+	<noscript>
+		<p>
+			Javascript is reqired to use this site. It's not 1999 anymore.
+		</p>
+	</noscript>
+	<script data-main="scripts/main" src="scripts/lib/require.js"></script>
+
+	<title>Rhyme Generator</title>
+	<meta name="description" content="Generates rhyming words to help make song writing easy, (kind of..)" />
+	<meta name="keywords" content="rhyme, songwriting, helper, tool, lyrics">
+</head>
+<body>
+
+<header class="fixed shadowed">
+	<a id="site-title" href="#">Rhyme Generator</a>
+	<div id="add-new-board-box" class="float-right">
+		<i class="fa fa-bars menu-icon" id="page-main-menu"></i>
+	</div>
+</header>
+<div id="content-container" class="shadowed rhymer">
+	<textarea></textarea>
+	<input placeholder="What rhymes with..."/>
+	<button>Suggest</button>
+</div>
+<div id="rhyme-zone" class="fixed shadowed">
+	<div class="rhyme">Rhymes will appear here.</div>
+</div>
+<div id="bad-browser-container">
+	<!--[if lt IE 9]>
+		<p>
+			<noscript>Also,</noscript> Internet Explorer 8 and below are not supported. Try updating or using a newer browser like:
+			<a href="https://www.google.com/chrome/browser/desktop/index.html">Google Chrome</a> or
+			<a href="https://www.mozilla.org/en-US/">Firefox</a>.
+		</p>
+		<p>
+			Think about all the stuff you've done since 
+	<![endif]-->
+	<!--[if IE 8]><a href="https://www.google.com/search?q=Internet+Explorer+8+Release+Date">2009 when Internet Exploer 8 was released</a>.<![endif]-->
+	<!--[if IE 7]><a href="https://www.google.com/search?sclient=psy-ab&hl=en&site=webhp&source=hp&q=Internet+Explorer+7+Release+Date">2006 when Internet Exploer 7 was released</a>.<![endif]-->
+	<!--[if IE 6]><a href="https://www.google.com/search?sclient=psy-ab&hl=en&site=webhp&source=hp&q=Internet+Explorer+6+Release+Date">2001 when Internet Exploer 6 was released</a>.<![endif]-->
+	<!--[if IE 5]><a href="https://www.google.com/search?sclient=psy-ab&q=Internet+Explorer+5+release+date">1999 when Internet Exploer 5 was released</a>.<![endif]-->
+	<!--[if lt IE 9]>	
+			<b>The internet changes. So should your browser.</b>
+		</p>
+	<![endif]-->
+</div>
+</body>
+</html>

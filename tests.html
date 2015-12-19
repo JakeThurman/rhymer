@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Fill In The Blank -->
+  <title>Rhyme Generator</title>
+  
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="images/logo.ico" />
+  <link rel="stylesheet" href="style/tests/jasmine.css">
+  
+  <!-- Making jasmine work with require js isn't worth the time to get the almost 0 return. -->
+  <script src="tests/jasmine/jasmine.js"></script>
+  <script src="tests/jasmine/jasmine-html.js"></script>
+  <script src="tests/jasmine/boot.js"></script>
+  <script src="scripts/lib/require.js"></script>
+
+  <script>
+	    require([ "scripts/main" ], function () {
+			/* Load all of the tests as if they were dependencies */
+			require([ 
+				/* core tests */
+				"../tests/core/helperMethodTests",
+				"../tests/core/stringReplacerTests",
+				"../tests/core/asyncTests",
+				"../tests/core/changeLoggerTests",
+				"../tests/core/colorEffectsTests",
+				
+				/* utility */
+				"domReady!"
+			], 
+			function () {
+				/* Once they've all loaded, trigger jasmine */
+				window.onload();
+			});
+		});
+	</script>	
+</head>
+<body>
+  <!-- left blank intentionally -->
+</body>
+</html>
