@@ -22,6 +22,7 @@ requirejs.config({
 		"changeTypes":     "data/changeInfo",
 		"batchTypes":      "data/changeInfo",
 		"objectTypes":     "data/changeInfo",
+		"textResources":   "data/textResources",
 		
 		/* Data Classes */
 		"Rhymer":          "data/rhymer",
