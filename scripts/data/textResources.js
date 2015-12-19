@@ -23,4 +23,7 @@ define({
 	color_Gray: "Gray",
 	color_LightGray: "Light Gray",
 	color_White: "White",
+	
+	settings_maxResults: "Suggestion Results:",
+	settings_maxResults_error: "Use a number between {0} and {1}",
 });

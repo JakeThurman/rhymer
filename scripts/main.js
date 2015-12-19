@@ -26,6 +26,9 @@ requirejs.config({
 		
 		/* Data Classes */
 		"Rhymer":          "data/rhymer",
+		
+		/* UI */
+		"settingsMenu":    "ui/settingsMenu",
 	},
 	config: {
 		moment: {
@@ -34,42 +37,49 @@ requirejs.config({
 	}
 });
 
-require([ "jquery", "Rhymer", "helperMethods", "Storage" ], 
-function ( $, Rhymer, helpers, Storage ) {
+require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu" ], 
+function ( $, Rhymer, helpers, Storage, settingsMenu ) {
 	"use strict";
-	
+		
 	var info = {
-		appName:   "rhyme-gen",
-		cacheName: "cache",
-		songName:  "song",
-		maxResults: 25,
+		storage: {
+			appName: "rhyme-gen",
+			cache: "cache",
+			song: "song",
+			settings: "settings",
+		},
+		defaultSettings: {
+			maxResults: 25,
+		},
 		keyCode: {
 			enter: 13,
 			s:     83,
-		}
+		},
 	};
 	
 	/* Remove Global */
 	$.noConflict();
 	
 	/* DOM Variables */
-   	var mainContentContainer = $("#content-container"),
-   	    pageMenuButton       = $("#page-main-menu"),
-		output               = mainContentContainer.children("textarea"),
-		newLine              = mainContentContainer.children("input"),
-		suggestButton        = mainContentContainer.children("button"),
-		rhymes               = $("#rhyme-zone");
-		
+   	var contentContainer = $("#content-container"),
+   	    settingsButton   = $("#page-main-menu"),
+		output           = contentContainer.children("textarea"),
+		newLine          = contentContainer.children("input"),
+		suggestButton    = contentContainer.children("button"),
+		rhymes           = $("#rhyme-zone");
+	
 	/* Instance Variables */
-	var storage  = new Storage(info.appName, Storage.ADMIN),
-	    rhymer   = new Rhymer(info.maxResults, storage.get(info.cacheName));
+	var storage      = new Storage(info.storage.appName, Storage.ADMIN),
+	    saveSettings = function (newSettings) { 
+	                       storage.set(info.storage.settings, newSettings); 
+						   settings = newSettings;
+						   rhymer.setMaxResults(settings.maxResults);
+	                       return newSettings; 
+	                   },
+	    settings     = storage.get(info.storage.settings) || saveSettings(info.defaultSettings),
+	    rhymer       = new Rhymer(settings.maxResults, storage.get(info.storage.cache));
 		
-	/* Setup */
-	output.val(storage.get(info.songName))
-		.keydown(function() {
-			storage.set(info.songName, output.val());
-		});
-		
+	/* Functions */
 	var addRhyme = function(word) {
 		rhymes.append($("<div>", { "class": "rhyme" }).text(word));
 	};
@@ -79,7 +89,7 @@ function ( $, Rhymer, helpers, Storage ) {
 		
 		helpers.forEach(words, addRhyme);
 		
-		storage.set(info.cacheName, rhymer.cache);
+		storage.set(info.storage.cache, rhymer.cache);
 	};
 	
 	var suggest = function(perferSelection) {
@@ -96,8 +106,14 @@ function ( $, Rhymer, helpers, Storage ) {
 			}
 		}
 		
-		rhymer.rhyme(newLine.val(), handleRhymes);
-	}
+		rhymer.rhyme(val, handleRhymes);
+	};
+	
+	/* Setup */
+	output.val(storage.get(info.storage.song))
+		.keydown(function() {
+			storage.set(info.storage.song, output.val());
+		});
 	
 	newLine.keypress(function (e) {
 		if (e.keyCode === info.keyCode.enter)
@@ -110,4 +126,8 @@ function ( $, Rhymer, helpers, Storage ) {
 	});
 	
 	suggestButton.click(suggest);
+	
+	settingsButton.click(function() {
+		settingsMenu.create(settings, saveSettings, settingsButton);
+	});
 });

@@ -71,6 +71,10 @@ define(["helperMethods"], function (helpers) {
 		};
 		
 		this.cache = cache || {};
+		
+		this.setMaxResults = function (newMR) {
+			maxResults = newMR;
+		};
 			
 		/*
 		 * Gets rhyming words

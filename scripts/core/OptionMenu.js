@@ -8,12 +8,14 @@ define(["jquery"], function ($) {
 	 * Creates an option menu 
 	 *
 	 * PARAMS:
-	 *   @optionLinks: ($)            Items to be appended to the menu 
-	 *   @link:        ($) {optional} The refurring link, skip to avoid positioning
+	 *   @optionLinks: ($)               Items to be appended to the menu 
+	 *   @link:        ($)    {optional} The refurring link, skip to avoid positioning
+	 *   @isValid:     (func) {optional} Validation function. If it returns false will not close.
+	 *   @onClose:     (func) {optional} Called before close.
 	 *
 	 * @returns: $(menu)
 	 */
-  	methods.create = function (optionLinks, link) {		
+  	methods.create = function (optionLinks, link, isValid, onClose) {		
 	
   		var el = $("<div>", { "class": "options-menu shadowed" })
 			.append(optionLinks);
@@ -23,9 +25,25 @@ define(["jquery"], function ($) {
 		else
 			el.appendTo(document.body);
 
-		setTimeout(function () {
-			$(document).one("click", function () {
-				el.remove();
+		setTimeout(function again() {
+			$(document).one("click", function (e) {
+				if (isValid && !isValid()) {
+					again();
+					return;
+				}
+				
+				var anyContain = false;
+				optionLinks.each(function () {
+					anyContain = anyContain || $.contains(this, e.target);
+				});
+				
+				if(anyContain)
+					again();
+				else 
+				{
+					onClose();
+					el.remove();
+				}
 			});
 		}, 0);/*Keeps jquery from firing on this click event*/
 

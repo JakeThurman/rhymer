@@ -14,9 +14,13 @@
 
 #rhyme-zone {
 	top: 47px;
-	right: 25px;
+	left: 25px;
 	border: 1px black solid;
 	border-radius: 5px;
+}
+
+.error {
+	color: red;
 }
 
 .rhyme {
@@ -472,7 +476,7 @@ body {
 	position: absolute;
 	top: 35px;
 	z-index: 1001;
-	right: -1px;
+	right: 0px;
 }
 
 .options-menu::before {
