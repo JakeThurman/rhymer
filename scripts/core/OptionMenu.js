@@ -39,8 +39,7 @@ define(["jquery"], function ($) {
 				
 				if(anyContain)
 					again();
-				else 
-				{
+				else {
 					onClose();
 					el.remove();
 				}

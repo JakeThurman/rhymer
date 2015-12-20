@@ -1,8 +1,8 @@
-define(function () {
+define(["jquery"], function ($) {
 	"use strict";
 	
-	/* SOURCE: http://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript#answer-30810322 */
-	function clipboard(text) {
+	// Source: http://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript#answer-30810322
+	function clipboard(text) {		
 		var textArea = document.createElement("textarea");
 
 		//
@@ -78,8 +78,10 @@ define(function () {
 	}
 	
 	function readFile(fileEl, callback) {		
+		if (!supportsFileAPI())
+			throw new Error("File API not supported");
 		if (!hasFile(fileEl))
-			throw new Error("@fileEl has no file selected");
+			return false;
 			
 		var reader = new FileReader();
 
@@ -90,16 +92,33 @@ define(function () {
 
 		reader.readAsBinaryString(fileEl.files[0]);
 	}
-
-	document.querySelector('.readBytesButtons').addEventListener('click', function(evt) {
-		if (evt.target.tagName.toLowerCase() == 'button') {
-			readFile(document.getElementById('files'));
-		}
-	}, false);
+	
+	// Source: http://jsfiddle.net/uselesscode/qm5ag/
+	function makeFile(text) {
+		if (!supportsFileAPI())
+			throw new Error("File API not supported");
+		
+		return window.URL.createObjectURL(new Blob([text], {type: 'text/plain'}));
+	}
+	
+	function downloadFile(text, fileName) {
+		var file = makeFile(text);
+		
+		$("<a>", { 
+			href: file,
+			download: fileName
+		}).appendTo(document.body)
+			.click()
+			.remove();
+		
+		// Revoke the object URL to avoid memory leaks.
+		window.URL.revokeObjectURL(file);
+	}
 	
 	return {
 		clipboard: clipboard,
 		hasFile: hasFile,
 		readFile: readFile,
+		downloadFile: downloadFile,
 	};
 });

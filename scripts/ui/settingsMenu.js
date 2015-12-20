@@ -17,19 +17,11 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 	}
 	
 	var menu;
-	var onClose = function () {
-		menu = void(0); 
-	};
 	
 	var create = function ( settings, saveSettings, settingsButton ) {
 	
-		if (menu) {
-			if (menu.validate()) {
-				onClose();
-				menu.remove();
-			}
+		if (menu)
 			return;
-		}
 				
 		/* Define DOM elements for settings */
 		var maxResults = {
@@ -47,7 +39,6 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 				return isValid;
 			},
 		};
-		
 		
 		/* Handles Settings Updates */
 		var validate = function () {
@@ -88,7 +79,9 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 		}));
 		
 		/* Create the Menu */		
-		menu = _OptionMenu.create(options, settingsButton, validate, onClose);
+		menu = _OptionMenu.create(options, void(0), validate, function () {
+			menu = void(0); 
+		}).addClass("main-page-menu");
 		menu.validate = validate;
 	};
 	

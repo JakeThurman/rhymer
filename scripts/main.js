@@ -23,6 +23,7 @@ requirejs.config({
 		"batchTypes":      "data/changeInfo",
 		"objectTypes":     "data/changeInfo",
 		"textResources":   "data/textResources",
+		"copier":          "data/copier",
 		
 		/* Data Classes */
 		"Rhymer":          "data/rhymer",
@@ -37,8 +38,8 @@ requirejs.config({
 	}
 });
 
-require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu" ], 
-function ( $, Rhymer, helpers, Storage, settingsMenu ) {
+require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "!domReady" ], 
+function ( $, Rhymer, helpers, Storage, settingsMenu, copier ) {
 	"use strict";
 		
 	var info = {
@@ -66,7 +67,9 @@ function ( $, Rhymer, helpers, Storage, settingsMenu ) {
 		output           = contentContainer.children("textarea"),
 		newLine          = contentContainer.children("input"),
 		suggestButton    = contentContainer.children("button"),
-		rhymes           = $("#rhyme-zone");
+		rhymes           = $("#rhyme-zone"),
+		download         = contentContainer.children("#download"),
+		upload           = contentContainer.children("#upload").children("input");
 	
 	/* Instance Variables */
 	var storage      = new Storage(info.storage.appName, Storage.ADMIN),
@@ -94,13 +97,11 @@ function ( $, Rhymer, helpers, Storage, settingsMenu ) {
 	
 	var suggest = function(perferSelection) {
 		var val = newLine.val();
-		if (val === "" || perferSelection === true)
-		{
+		if (val === "" || perferSelection === true) {
 			// Browser API: window.getSelection()
 			val = getSelection().toString();
 			
-			if (val === "")
-			{
+			if (val === "") {
 				rhymes.empty();
 				return; // If nothing is to available to rhyme with, clear and return
 			}
@@ -129,5 +130,15 @@ function ( $, Rhymer, helpers, Storage, settingsMenu ) {
 	
 	settingsButton.click(function() {
 		settingsMenu.create(settings, saveSettings, settingsButton);
+	});
+	
+	upload.change(function () { 
+		copier.readFile(upload.get(0), function (text) {
+			console.log(text);
+		});
+	});
+	
+	download.click(function () {
+		copier.downloadFile(output.val(), "rhyme.txt");
 	});
 });

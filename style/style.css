@@ -13,10 +13,38 @@
 }
 
 #rhyme-zone {
-	top: 47px;
-	left: 25px;
 	border: 1px black solid;
 	border-radius: 5px;
+}
+
+#upload:hover, #download:hover {
+	color: #111;
+}
+
+#upload, #download {
+	font-size: 2em;
+	line-height: 26px;
+	color: #555;
+	transition: color .3s ease; 
+	-webkit-transition:  color .3s ease;
+	-moz-transition: color .3s ease;
+	-o-transition: color .3s ease;
+}
+
+#upload > input {
+	position: absolute;
+	top: 0;
+	width: 23px;
+	padding: 0;
+	opacity: 0;
+	margin: 0;
+	left: 0;
+}
+
+#download {
+	padding-top: 1px;
+	padding-left: 7px;
+	padding-right: 4px;
 }
 
 .error {
@@ -198,10 +226,19 @@ header.fixed {
 	.options-menu.main-page-menu {
 		top: 40px;
 	}
+	
+	#content-container {
+		margin-top: 47px;
+	}
+
+	#rhyme-zone {
+		top: 47px;
+		left: 22px;
+	}
 }
 
 @media (max-width: 699px) {	
-	.options-menu.main-page-menu::before {
+	#add-new-board-box > .options-menu::before {
 		right: 3px;
 	}
 }
@@ -228,6 +265,16 @@ header.fixed {
 	
 	.options-menu.main-page-menu {
 		top: 35px;
+	}
+	
+	#content-container {
+		margin-top: 39px;
+	}
+
+	#rhyme-zone {
+		top: 39px;
+		font-size: 0.8em;
+		right: 8px;
 	}
 }
 
@@ -282,6 +329,16 @@ header.fixed {
 	.right-side > .tooltip::before  {
 		left: initial !important;
 		right: 0;
+	}
+	
+	#content-container {
+		margin-top: 31px;
+	}
+
+	#rhyme-zone {
+		top: 31px;
+		font-size: 0.7em;
+		right: 8px;
 	}
 }
 
