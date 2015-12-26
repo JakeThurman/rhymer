@@ -1,4 +1,4 @@
-define(["jquery"], function ($) {
+define(function () {
 	"use strict";
 	
 	// Source: http://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript#answer-30810322
@@ -94,31 +94,24 @@ define(["jquery"], function ($) {
 	}
 	
 	// Source: http://jsfiddle.net/uselesscode/qm5ag/
+	var prevFile;
 	function makeFile(text) {
 		if (!supportsFileAPI())
 			throw new Error("File API not supported");
 		
-		return window.URL.createObjectURL(new Blob([text], {type: 'text/plain'}));
-	}
-	
-	function downloadFile(text, fileName) {
-		var file = makeFile(text);
+		// Revoke the old file URL to avoid memory leaks.
+		if (prevFile)
+			window.URL.revokeObjectURL(prevFile);
 		
-		$("<a>", { 
-			href: file,
-			download: fileName
-		}).appendTo(document.body)
-			.click()
-			.remove();
-		
-		// Revoke the object URL to avoid memory leaks.
-		window.URL.revokeObjectURL(file);
+		//Create the file
+		prevFile = window.URL.createObjectURL(new Blob([text], {type: 'text/plain'}));
+		return prevFile;
 	}
 	
 	return {
 		clipboard: clipboard,
 		hasFile: hasFile,
 		readFile: readFile,
-		downloadFile: downloadFile,
+		makeFile: makeFile,
 	};
 });

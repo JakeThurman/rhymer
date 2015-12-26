@@ -30,6 +30,7 @@ requirejs.config({
 		
 		/* UI */
 		"settingsMenu":    "ui/settingsMenu",
+		"classes":         "ui/classes",
 	},
 	config: {
 		moment: {
@@ -38,8 +39,8 @@ requirejs.config({
 	}
 });
 
-require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "!domReady" ], 
-function ( $, Rhymer, helpers, Storage, settingsMenu, copier ) {
+require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "textResources", "classes", "!domReady" ], 
+function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes ) {
 	"use strict";
 		
 	var info = {
@@ -51,6 +52,8 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier ) {
 		},
 		defaultSettings: {
 			maxResults: 25,
+			fileName: "rhyme.rhyme",
+			showLeft: true,
 		},
 		keyCode: {
 			enter: 13,
@@ -62,53 +65,71 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier ) {
 	$.noConflict();
 	
 	/* DOM Variables */
-   	var contentContainer = $("#content-container"),
-   	    settingsButton   = $("#page-main-menu"),
-		output           = contentContainer.children("textarea"),
-		newLine          = contentContainer.children("input"),
-		suggestButton    = contentContainer.children("button"),
-		rhymes           = $("#rhyme-zone"),
-		download         = contentContainer.children("#download"),
-		upload           = contentContainer.children("#upload").children("input");
+   	var settingsButton     = $("#page-main-menu"),
+		output             = $("#content-container > textarea"),
+		suggestText        = $("#content-container > input"),
+		leftSuggestButton  = $("#left-suggest"),
+		rightSuggestButton = $("#right-suggest"),
+		leftRhymes         = $("#left-rhyme"),
+		rightRhymes        = $("#right-rhyme"),
+		download           = $("#download"),
+		downloadLink       = download.children("a"),
+		upload             = $("#upload");
 	
 	/* Instance Variables */
 	var storage      = new Storage(info.storage.appName, Storage.ADMIN),
 	    saveSettings = function (newSettings) { 
-	                       storage.set(info.storage.settings, newSettings); 
-						   settings = newSettings;
-						   rhymer.setMaxResults(settings.maxResults);
-	                       return newSettings; 
+	                      storage.set(info.storage.settings, newSettings); 
+		                  settings = newSettings;
+		                  if (rhymer)
+		                     rhymer.setMaxResults(settings.maxResults);
+	                      return newSettings; 
 	                   },
 	    settings     = storage.get(info.storage.settings) || saveSettings(info.defaultSettings),
 	    rhymer       = new Rhymer(settings.maxResults, storage.get(info.storage.cache));
 		
 	/* Functions */
-	var addRhyme = function(word) {
-		rhymes.append($("<div>", { "class": "rhyme" }).text(word));
-	};
-	
-	var handleRhymes = function(words) {
-		rhymes.empty();
+	var addRhyme = function(word, parent) {
+		parent.append(
+			$("<div>", { "class": "rhyme" })
+				.append($("<span>")
+					.css("font-size", "0.7em")
+					.text(word.score + " - "))
+				.append($("<strong>").text(word.word)));
+	},
+	handleRhymes = function(words, parent) {
+		parent.empty();
 		
-		helpers.forEach(words, addRhyme);
+		helpers.forEach(words, function (word) { 
+			addRhyme(word, parent) 
+		});
 		
 		storage.set(info.storage.cache, rhymer.cache);
-	};
-	
-	var suggest = function(perferSelection) {
-		var val = newLine.val();
-		if (val === "" || perferSelection === true) {
-			// Browser API: window.getSelection()
-			val = getSelection().toString();
-			
-			if (val === "") {
-				rhymes.empty();
-				return; // If nothing is to available to rhyme with, clear and return
-			}
+	},
+	suggest = function(parent) {
+		var val = suggestText.val();
+		
+		if (val === "") {
+			rhymes.empty();
+			return; // If nothing is to available to rhyme with, clear and return
 		}
 		
-		rhymer.rhyme(val, handleRhymes);
+		rhymer.rhyme(val, function (words) {
+			handleRhymes(words, parent);
+		});
+	},
+	leftSuggest = function () {
+		suggest(leftRhymes);
+	},
+	rightSuggest = function () {
+		suggest(rightRhymes);
+	},
+	toggleLeft = function (show) { 
+		leftRhymes.toggleClass(classes.hide, !show);
+		leftSuggestButton.toggleClass(classes.opaque, !show);
 	};
+	
+	toggleLeft(settings.showLeft);
 	
 	/* Setup */
 	output.val(storage.get(info.storage.song))
@@ -116,29 +137,42 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier ) {
 			storage.set(info.storage.song, output.val());
 		});
 	
-	newLine.keypress(function (e) {
+	suggestText.keypress(function (e) {
 		if (e.keyCode === info.keyCode.enter)
-			suggest();
+			rightSuggest();
 	});
+	
+	leftSuggestButton.click(leftSuggest);
+	rightSuggestButton.click(rightSuggest);
 	
 	$(document).keydown(function (e) {
-		if (e.altKey && e.keyCode === info.keyCode.s)
-			suggest(true);
+		if (e.altKey && e.keyCode === info.keyCode.s) {
+			// Browser API: window.getSelection()
+			suggestText.val(getSelection().toString())
+				.focus();
+		}
 	});
-	
-	suggestButton.click(suggest);
 	
 	settingsButton.click(function() {
-		settingsMenu.create(settings, saveSettings, settingsButton);
+		settingsMenu.create(settings, saveSettings, settingsButton, toggleLeft);
 	});
 	
-	upload.change(function () { 
+	upload.change(function () {
+		if (!copier.hasFile(upload.get(0)) || !confirm(resources.deleteExistingSongConfirm))
+			return;
+	
 		copier.readFile(upload.get(0), function (text) {
-			console.log(text);
+			output.val(text);
 		});
 	});
 	
-	download.click(function () {
-		copier.downloadFile(output.val(), "rhyme.txt");
+	download.hover(function () {
+		downloadLink
+			.attr("href", copier.makeFile(output.val()))
+			.attr("download", settings.fileName);
+	});
+	
+	leftRhymes.add(rightRhymes).click(function () {
+		suggestText.focus();
 	});
 });

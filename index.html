@@ -30,13 +30,20 @@
 <div id="content-container" class="shadowed rhymer">
 	<textarea></textarea>
 	<input placeholder="What rhymes with..."/>
-	<button>Suggest</button>
-	<i class="fa fa-download float-left menu-icon" title="Download" id="download"></i>
-	<i class="fa fa-upload float-right menu-icon" title="Upload" id="upload">
-		<input type="file"/>
-	</i>
+	<button id="left-suggest" class="opaque">Suggest (Left)</button>
+	<button id="right-suggest" class="float-right">Suggest (Right)</button>
+	<div id="controls">
+		<i class="fa fa-download menu-icon float-right" title="Download" id="download">
+			<a class="opaque"></a>
+		</i>
+		<label for="upload" class="fa fa-upload float-right menu-icon" title="Upload"></label>
+		<input id="upload" class="opaque" accept=".rhyme" type="file"/>
+	</div>
 </div>
-<div id="rhyme-zone" class="fixed shadowed">
+<div id="left-rhyme" class="rhyme-zone display-none fixed shadowed">
+	<div class="rhyme">Rhymes will appear here.</div>
+</div>
+<div id="right-rhyme" class="rhyme-zone fixed shadowed">
 	<div class="rhyme">Rhymes will appear here.</div>
 </div>
 <div id="bad-browser-container">

@@ -17,7 +17,7 @@ define(["helperMethods"], function (helpers) {
 	};
 	
 	/*
-	 * Gets Rhymes from the Rhyme API
+	 * Gets Rhymes from the Rhyme API NOTE: Could use https://api.datamuse.com/words?rel_rhy={word}
 	 *
 	 * PARAMS:
 	 *   word: A string of a single word
@@ -66,7 +66,10 @@ define(["helperMethods"], function (helpers) {
 		
 		var select = function(words) {
 			return helpers.select(words, function (w) {
-				return w.word;
+				return {
+					word: w.word,
+					score: w.score,
+				};
 			});
 		};
 		
@@ -86,8 +89,10 @@ define(["helperMethods"], function (helpers) {
 			word = word.replace(info.symbolRegex,"").replace(info.twoPlusSpacesRegex," ").trim();
 			var cacheName = word.toLowerCase();
 			
-			if (self.cache[cacheName])
-				callback(self.cache[cacheName])
+			if (self.cache[cacheName]) {
+				callback(self.cache[cacheName]);
+				return;
+			}
 			
 			get(word, maxResults || info.defaultMaxResults, function (words) {
 				self.cache[cacheName] = select(filter(words, true));

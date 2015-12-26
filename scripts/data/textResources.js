@@ -24,6 +24,9 @@ define({
 	color_LightGray: "Light Gray",
 	color_White: "White",
 	
-	settings_maxResults: "Suggestion Results:",
+	settings_maxResults: "Suggestion Results: ",
 	settings_maxResults_error: "Use a number between {0} and {1}",
+	settings_fileName: "File Name: ",
+	settings_showLeft: "Show left suggest: ",
+	deleteExistingSongConfirm: "Are you sure you want to delete the existing song?",
 });
