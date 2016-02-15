@@ -1,4 +1,4 @@
-require([ "scripts/requireConfig" ], function () {
+require([ "requireConfig" ], function () {
 require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "textResources", "classes", "printer", "!domReady" ], 
 function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes, printer ) {
 	"use strict";
