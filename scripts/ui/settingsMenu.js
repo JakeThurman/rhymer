@@ -6,6 +6,7 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 			maxResults: "maxResults",
 			fileName: "fileName",
 			showLeft: "showLeft",
+			readonly: "readonly",
 		},
 		maxResults: {
 			max: 50,
@@ -16,11 +17,26 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 	
 	var menu;
 	
-	var create = function ( settings, saveSettings, settingsButton, toggleLeft ) {
+	var getMyFileExtension = function(fileName) {
+		if (!fileName)
+			return info.fileExtension;
+		
+		var segments = fileName.split(".");
+		var ext = segments[segments.length - 1];
+		
+		if (ext && ext.length)
+			return "." + ext;
+			
+		return info.fileExtension;
+	};
+	
+	var create = function ( settings, saveSettings, settingsButton, toggleLeft, toggleEditable ) {
 	
 		if (menu)
 			return;
-				
+		
+		var myFileExtension = getMyFileExtension(settings[info.settingsNames.fileName]);
+		
 		/* Define DOM elements for settings */
 		var maxResults = {
 			name: info.settingsNames.maxResults,
@@ -41,9 +57,9 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 		var fileName = {
 			name: info.settingsNames.fileName,
 			label: resources.settings_fileName,
-			input: $("<input>").val(settings[info.settingsNames.fileName].slice(0, -(info.fileExtension.length))).add($("<span>").text(info.fileExtension)),
+			input: $("<input>").val(settings[info.settingsNames.fileName].slice(0, -(myFileExtension.length))).add($("<span>").text(myFileExtension)),
 			val: function () {
-				return fileName.input.val() + info.fileExtension;
+				return fileName.input.val() + myFileExtension;
 			},
 		};
 		
@@ -55,6 +71,17 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 			}),
 			val: function () {
 				return showLeft.input.is(":checked");
+			},
+		};
+		
+		var readonly = {
+			name: info.settingsNames.readonly,
+			label: resources.settings_editMode,
+			input: $("<input>", { type: "checkbox", checked: settings[info.settingsNames.readonly] }).change(function () {
+				toggleEditable(readonly.val());
+			}),
+			val: function () {
+				return readonly.input.is(":checked");
 			},
 		};
 		
@@ -84,7 +111,7 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 		var updateSettings = function () { validate(); };
 		
 		/* Grab all of the elements */
-		var all = [ maxResults, fileName, showLeft ];
+		var all = [ maxResults, fileName, showLeft, readonly ];
 		var options = $(helpers.select(all, function (option) { 
 			if (option.error) {
 				option.error

@@ -3,50 +3,17 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<link rel="icon" type="image/png" href="images/logo.ico" />
-	<link rel="stylesheet" type="text/css" href="style/style.css"/>
-	<link rel="stylesheet" type="text/css" href="style/jquery-ui.min.css"/>
-	<link rel="stylesheet" tyle="text/css" href="style/font-awesome.min.css">
-	<link rel="stylesheet" tyle="text/css" href="style/open-sans-font.css">
-	<link rel="stylesheet" tyle="text/css" href="style/comfortaa-font.css">
 	<noscript>
 		<p>
 			Javascript is reqired to use this site. It's not 1999 anymore.
 		</p>
 	</noscript>
-	<script data-main="scripts/main" src="scripts/lib/require.js"></script>
-
+	<script src="scripts/lib/jquery.js"></script>
 	<title>Rhyme Generator</title>
 	<meta name="description" content="Generates rhyming words to help make song writing easy, (kind of..)" />
 	<meta name="keywords" content="rhyme, songwriting, helper, tool, lyrics">
 </head>
 <body>
-
-<header class="fixed shadowed">
-	<a id="site-title" href="#">Rhyme Generator</a>
-	<div id="add-new-board-box" class="float-right">
-		<i class="fa fa-print menu-icon" id="print-page"></i>
-		<i class="fa fa-gear menu-icon" id="page-main-menu"></i>
-	</div>
-</header>
-<div id="content-container" class="shadowed rhymer">
-	<textarea></textarea>
-	<input placeholder="What rhymes with..."/>
-	<button id="left-suggest" class="opaque">Suggest (Left)</button>
-	<button id="right-suggest" class="float-right">Suggest (Right)</button>
-	<div id="controls">
-		<i class="fa fa-download menu-icon float-right" title="Download" id="download">
-			<a class="opaque"></a>
-		</i>
-		<label for="upload" class="fa fa-upload float-right menu-icon" title="Upload"></label>
-		<input id="upload" class="opaque" accept=".rhyme" type="file"/>
-	</div>
-</div>
-<div id="left-rhyme" class="rhyme-zone display-none fixed shadowed">
-	<div class="rhyme">Rhymes will appear here.</div>
-</div>
-<div id="right-rhyme" class="rhyme-zone fixed shadowed">
-	<div class="rhyme">Rhymes will appear here.</div>
-</div>
 <div id="bad-browser-container">
 	<!--[if lt IE 9]>
 		<p>
@@ -66,5 +33,14 @@
 		</p>
 	<![endif]-->
 </div>
+<script>
+	(function (el, parent, text) {
+		el.textContent = text;
+		parent.appendChild(el);
+		el.style.fontSize = "22px";
+	})(document.createElement("pre"),
+		document.body,
+		JSON.parse(localStorage["rhyme-gen-song"]));
+</script>
 </body>
 </html>

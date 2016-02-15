@@ -27,6 +27,8 @@ define({
 	settings_maxResults: "Suggestion Results: ",
 	settings_maxResults_error: "Use a number between {0} and {1}",
 	settings_fileName: "File Name: ",
-	settings_showLeft: "Show left suggest: ",
+	settings_showLeft: "Show Left Suggest: ",
+	settings_editMode: "Use in Read Only Mode:",
+	
 	deleteExistingSongConfirm: "Are you sure you want to delete the existing song?",
 });

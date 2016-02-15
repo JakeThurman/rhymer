@@ -31,6 +31,7 @@ requirejs.config({
 		/* UI */
 		"settingsMenu":    "ui/settingsMenu",
 		"classes":         "ui/classes",
+		"printer":         "ui/printer",
 	},
 	config: {
 		moment: {
@@ -39,8 +40,8 @@ requirejs.config({
 	}
 });
 
-require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "textResources", "classes", "!domReady" ], 
-function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes ) {
+require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "textResources", "classes", "printer", "!domReady" ], 
+function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes, printer ) {
 	"use strict";
 		
 	var info = {
@@ -54,6 +55,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 			maxResults: 25,
 			fileName: "rhyme.rhyme",
 			showLeft: true,
+			readonly: true,
 		},
 		keyCode: {
 			enter: 13,
@@ -74,7 +76,8 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		rightRhymes        = $("#right-rhyme"),
 		download           = $("#download"),
 		downloadLink       = download.children("a"),
-		upload             = $("#upload");
+		upload             = $("#upload"),
+		printPage          = $("#print-page");
 	
 	/* Instance Variables */
 	var storage      = new Storage(info.storage.appName, Storage.ADMIN),
@@ -90,12 +93,13 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		
 	/* Functions */
 	var addRhyme = function(word, parent) {
-		parent.append(
-			$("<div>", { "class": "rhyme" })
+		var rhymeEl = $("<div>", { "class": "rhyme" })
 				.append($("<span>")
 					.css("font-size", "0.7em")
 					.text(word.score + " - "))
-				.append($("<strong>").text(word.word)));
+				.append($(word.score < 300 ? "<span>" : "<strong>").text(word.word));
+		
+		parent.append(rhymeEl);
 	},
 	handleRhymes = function(words, parent) {
 		parent.empty();
@@ -127,9 +131,13 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	toggleLeft = function (show) { 
 		leftRhymes.toggleClass(classes.hide, !show);
 		leftSuggestButton.toggleClass(classes.opaque, !show);
+	},
+	toggleEditMode = function (isReadonly) {
+		output.attr("readonly", isReadonly);
 	};
 	
 	toggleLeft(settings.showLeft);
+	toggleEditMode(settings.readonly);
 	
 	/* Setup */
 	output.val(storage.get(info.storage.song))
@@ -154,15 +162,24 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	});
 	
 	settingsButton.click(function() {
-		settingsMenu.create(settings, saveSettings, settingsButton, toggleLeft);
+		settingsMenu.create(settings, saveSettings, settingsButton, toggleLeft, toggleEditMode);
 	});
 	
+	function shouldOverwrite() {
+		if (output.val().trim() === "")
+			return true;
+		
+		return confirm(resources.deleteExistingSongConfirm);
+	}
+	
 	upload.change(function () {
-		if (!copier.hasFile(upload.get(0)) || !confirm(resources.deleteExistingSongConfirm))
+		if (!copier.hasFile(upload.get(0)) || !shouldOverwrite())
 			return;
 	
-		copier.readFile(upload.get(0), function (text) {
+		copier.readFile(upload.get(0), function (text, fileName) {
 			output.val(text);
+			settings.fileName = fileName;
+			saveSettings(settings);
 		});
 	});
 	
@@ -174,5 +191,9 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	
 	leftRhymes.add(rightRhymes).click(function () {
 		suggestText.focus();
+	});
+	
+	printPage.click(function () {
+		printer.print(output.val(), settings.fileName);
 	});
 });

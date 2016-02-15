@@ -248,7 +248,7 @@ header.fixed {
 		line-height: 36px;
 	}
 	
-	.menu-icon#page-main-menu {
+	#add-new-board-box > .menu-icon {
 		font-size: 2.5em;
 		line-height: 36px;
 	}
@@ -295,7 +295,7 @@ header.fixed {
 		line-height: 31px;
 	}
 	
-	.menu-icon#page-main-menu {
+	#add-new-board-box > .menu-icon {
 		font-size: 2.2em;
 		line-height: 31px;
 	}
@@ -337,7 +337,7 @@ header.fixed {
 		line-height: 26px;
 	}
 	
-	.menu-icon#page-main-menu {
+	#add-new-board-box > .menu-icon {
 		font-size: 2em;
 		line-height: 26px;
 	}
@@ -410,16 +410,18 @@ header.fixed {
 }
 
 header > #site-title ,
-.menu-icon#page-main-menu {
+#add-new-board-box > .menu-icon {
 	transition: font-size .2s ease, line-height .2s ease;
 	-webkit-transition: font-size .2s ease, line-height .2s ease;
 	-moz-transition: font-size .2s ease, line-height .2s ease;
 	-o-transition: font-size .2s ease, line-height .2s ease;
 }
 
-.menu-icon#page-main-menu {
+#add-new-board-box > .menu-icon {
     height: 100%;
-    margin-right: 6px;
+    padding-right: 6px;
+    padding-left: 6px;
+    margin: 0;
 	color: #fff;
 	opacity: 0.8;
 }
@@ -439,13 +441,10 @@ header > #add-new-board-box {
 	height: 100%;
 }
 
-header > #add-new-board-box:hover > #page-main-menu {
-	opacity: 1;
-}
-
 header > #site-title:hover,
-header #add-new-board-box:hover {
+header #add-new-board-box > .menu-icon:hover {
 	background-color: #729469;
+	opacity: 1;
 }
 
 button {
