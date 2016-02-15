@@ -1,45 +1,4 @@
-requirejs.config({
-	baseUrl: "scripts",
-	paths: {
-		/* Libraries */
-		"domReady":        "lib/domReady",
-		"jquery":          "lib/jquery",
-		"jquery-ui":       "lib/jquery-ui",
-		"Chart":           "lib/Chart",
-		"moment":          "lib/moment",
-
-		/* Core */
-		"helperMethods":   "core/helperMethods",
-		"stringReplacer":  "core/stringReplacer",
-		"async":           "core/async",
-		"ChangeLogger":    "core/changeLogger",
-		"colorEffects":    "core/colorEffects",
-		"Storage":         "core/storage",
-		"_Popup":          "core/Popup",
-		"_OptionMenu":     "core/OptionMenu",
-
-		/* Data */
-		"changeTypes":     "data/changeInfo",
-		"batchTypes":      "data/changeInfo",
-		"objectTypes":     "data/changeInfo",
-		"textResources":   "data/textResources",
-		"copier":          "data/copier",
-		
-		/* Data Classes */
-		"Rhymer":          "data/rhymer",
-		
-		/* UI */
-		"settingsMenu":    "ui/settingsMenu",
-		"classes":         "ui/classes",
-		"printer":         "ui/printer",
-	},
-	config: {
-		moment: {
-			noGlobal: true
-        }
-	}
-});
-
+require([ "scripts/requireConfig" ], function () {
 require([ "jquery", "Rhymer", "helperMethods", "Storage", "settingsMenu", "copier", "textResources", "classes", "printer", "!domReady" ], 
 function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes, printer ) {
 	"use strict";
@@ -60,6 +19,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		keyCode: {
 			enter: 13,
 			s:     83,
+			p:     80,
 		},
 	};
 	
@@ -134,6 +94,9 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	},
 	toggleEditMode = function (isReadonly) {
 		output.attr("readonly", isReadonly);
+	},
+	_print = function () {
+		printer.print(output.val(), settings.fileName);
 	};
 	
 	toggleLeft(settings.showLeft);
@@ -158,6 +121,10 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 			// Browser API: window.getSelection()
 			suggestText.val(getSelection().toString())
 				.focus();
+		}
+		else if (e.ctrlKey && e.keyCode === info.keyCode.p) {
+			_print();
+			e.preventDefault();
 		}
 	});
 	
@@ -193,7 +160,6 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		suggestText.focus();
 	});
 	
-	printPage.click(function () {
-		printer.print(output.val(), settings.fileName);
-	});
+	printPage.click(_print);
+});
 });
