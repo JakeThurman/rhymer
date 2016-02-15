@@ -251,7 +251,7 @@ define([ "helperMethods", "async" ], function ( helpers, async ) {
 			/* Return a kill function */
 			return function () {
 				callbacks = helpers.where(callbacks, function (callback) {
-					return callback.func !== func && waitForBatchCompletion !== waitForBatchCompletion;
+					return callback.func !== func;
 				});
 			};
 		};
