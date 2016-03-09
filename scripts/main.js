@@ -12,7 +12,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		},
 		defaultSettings: {
 			maxResults: 25,
-			fileName: "rhyme.rhyme",
+			fileName: "MyRhyme.txt",
 			showLeft: true,
 			readonly: true,
 		},

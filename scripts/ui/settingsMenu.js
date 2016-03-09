@@ -13,7 +13,7 @@ define([ "_OptionMenu", "textResources", "jquery", "stringReplacer", "helperMeth
 			min: 1,
 		},
 		fileExtension: ".rhyme",
-	}
+	};
 	
 	var menu;
 	
