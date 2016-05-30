@@ -24,21 +24,26 @@
 <header class="fixed shadowed">
 	<a id="site-title" href="#">Rhyme Generator</a>
 	<div id="add-new-board-box" class="float-right">
+		<i class="fa fa-save menu-icon" id="save" title="Save"></i>
 		<i class="fa fa-download menu-icon" title="Download" id="download">
 			<a class="opaque"></a>
 		</i>
 		<label for="upload" class="fa fa-upload menu-icon" title="Upload"></label>
-		<input id="upload" class="opaque" accept=".rhyme" type="file"/>
-		<i class="fa fa-print menu-icon" id="print-page"></i>
-		<i class="fa fa-gear menu-icon" id="page-main-menu"></i>
+		<input id="upload" class="opaque" accept=".rhyme,.txt" type="file"/>
+		<i class="fa fa-print menu-icon" id="print-page" title="Print"></i>
+		<i class="fa fa-gear menu-icon" id="page-main-menu" title="Settings"></i>
 	</div>
 </header>
 <div id="content-container" class="shadowed rhymer">
 	<textarea></textarea>
 	<input placeholder="What rhymes with..."/>
-	<button id="left-suggest" class="opaque">Suggest (Left)</button>
+	<button id="left-suggest" disabled class="opaque">Suggest (Left)</button>
 	<button id="right-suggest" class="float-right">Suggest (Right)</button>
 </div>
+<div id="library-pane" class="rhyme-zone display-none fixed shadowed">
+	<div class="rhyme">Saved songs will appear here.</div>
+</div>
+
 <div id="left-rhyme" class="rhyme-zone display-none fixed shadowed">
 	<div class="rhyme">Rhymes will appear here.</div>
 </div>

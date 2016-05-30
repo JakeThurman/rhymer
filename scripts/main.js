@@ -8,13 +8,14 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 			appName: "rhyme-gen",
 			cache: "cache",
 			song: "song",
+			library: "library",
 			settings: "settings",
 		},
 		defaultSettings: {
 			maxResults: 25,
 			fileName: "MyRhyme.txt",
 			showLeft: true,
-			readonly: true,
+			readonly: true
 		},
 		keyCode: {
 			enter: 13,
@@ -37,7 +38,9 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		download           = $("#download"),
 		downloadLink       = download.children("a"),
 		upload             = $("#upload"),
-		printPage          = $("#print-page");
+		printPage          = $("#print-page"),
+		libraryPane        = $("#library-pane"),
+		saveButton         = $("#save");
 	
 	/* Instance Variables */
 	var storage      = new Storage(info.storage.appName, Storage.ADMIN),
@@ -90,10 +93,16 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	},
 	toggleLeft = function (show) { 
 		leftRhymes.toggleClass(classes.hide, !show);
-		leftSuggestButton.toggleClass(classes.opaque, !show);
+		leftSuggestButton.toggleClass(classes.opaque, !show)
+			.attr("disabled", !show)
+			.attr("tab-index", show ? 0 : -1);
+
+		libraryPane.toggleClass(classes.hide, show);
+		saveButton.toggleClass(classes.hide, show);
 	},
 	toggleEditMode = function (isReadonly) {
-		output.attr("readonly", isReadonly);
+		output.attr("readonly", isReadonly)
+			.attr("disabled", isReadonly);
 	},
 	_print = function () {
 		printer.print(output.val(), settings.fileName);
@@ -132,21 +141,31 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		settingsMenu.create(settings, saveSettings, settingsButton, toggleLeft, toggleEditMode);
 	});
 	
-	function shouldOverwrite() {
-		if (output.val().trim() === "")
+	function shouldOverwrite(text) {
+		var content = output.val();	
+	
+		if (content.trim() === "")
+			return true;
+
+		if (content === text)
 			return true;
 		
 		return confirm(resources.deleteExistingSongConfirm);
 	}
 	
+	function setSong(text, fileName) {
+		output.val(text);
+		settings.fileName = fileName;
+		saveSettings(settings);
+	}
+
 	upload.change(function () {
-		if (!copier.hasFile(upload.get(0)) || !shouldOverwrite())
+		if (!copier.hasFile(upload.get(0)))
 			return;
 	
-		copier.readFile(upload.get(0), function (text, fileName) {
-			output.val(text);
-			settings.fileName = fileName;
-			saveSettings(settings);
+		copier.readFile(upload.get(0), function (content, name) {
+			if (shouldOverwrite(content))
+				setSong(content, name);
 		});
 	});
 	
@@ -161,5 +180,45 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	});
 	
 	printPage.click(_print);
+
+	/* Setup save */
+	/* TODO: Give some of this its own file */	
+	var saveCurrSong = function (name) {
+		var song = storage.get(info.storage.song); 
+		var lib = storage.get(info.storage.library) || [];
+
+		var newLib = helpers.where(lib, function (libItem) {
+				return libItem.name != settings.fileName;
+			}).concat({
+				name: settings.fileName,
+				content: song
+			});
+
+		storage.set(info.storage.library, newLib);
+		
+		updateLib();
+	},
+	updateLib = function () {
+		var lib = storage.get(info.storage.library); 
+
+		if (lib && lib.length)
+			libraryPane.empty();
+
+		helpers.forEach(lib, function (libItem) {
+			$("<div>", { "class": "rhyme" })
+				.text(libItem.name)
+				.click(function () { 
+					if (!shouldOverwrite(libItem.content))
+						return;
+
+					setSong(libItem.content, libItem.name);
+				})
+				.appendTo(libraryPane);
+		});
+	};
+
+	updateLib();
+	saveButton.click(saveCurrSong);
+
 });
 });

@@ -495,7 +495,7 @@ input {
 }
 
 .display-none {
-	display: none;
+	display: none !important;
 }
 
 .shadowed {
@@ -572,7 +572,7 @@ body {
     content: " ";
     margin-left: -9px;
     position: absolute;
-    top: -18px;
+    top: -16px;
     right: 8px;
     left: initial;
 }
