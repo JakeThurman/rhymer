@@ -14,7 +14,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		defaultSettings: {
 			maxResults: 25,
 			fileName: "MyRhyme.txt",
-			showLeft: true,
+			showLeft: false,
 			readonly: false 
 		},
 		keyCode: {
