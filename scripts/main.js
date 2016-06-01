@@ -15,7 +15,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 			maxResults: 25,
 			fileName: "MyRhyme.txt",
 			showLeft: true,
-			readonly: true
+			readonly: false 
 		},
 		keyCode: {
 			enter: 13,
