@@ -77,7 +77,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 		var val = suggestText.val();
 		
 		if (val === "") {
-			rhymes.empty();
+			parent.empty();
 			return; // If nothing is to available to rhyme with, clear and return
 		}
 		
