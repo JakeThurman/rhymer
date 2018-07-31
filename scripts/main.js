@@ -30,7 +30,7 @@ function ( $, Rhymer, helpers, Storage, settingsMenu, copier, resources, classes
 	/* DOM Variables */
    	var settingsButton     = $("#page-main-menu"),
 		output             = $("#content-container > textarea"),
-		suggestText        = $("#content-container > input"),
+		suggestText        = $("#content-container input"),
 		leftSuggestButton  = $("#left-suggest"),
 		rightSuggestButton = $("#right-suggest"),
 		leftRhymes         = $("#left-rhyme"),
