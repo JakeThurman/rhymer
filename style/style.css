@@ -15,6 +15,7 @@
 	-moz-transition: margin-top .3s ease;
 	-o-transition: margin-top .3s ease;
 	position: relative;
+	background-color: white;
 }
 
 .rhyme-requester {
