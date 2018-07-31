@@ -18,7 +18,7 @@
 }
 
 .rhyme-zone {
-	border: 1px black solid;
+	border: 1px #afafaf solid;
 	border-radius: 5px;
 	transition: top .3s ease, font-size .3s ease, left .3s ease, right .3s ease;
 	-webkit-transition: top .3s ease, font-size .3s ease, left .3s ease, right .3s ease;
@@ -64,13 +64,16 @@
 }
 
 .rhymer {
-	border: 1px black solid;
+	border: 1px #dedede solid;
 	border-radius: 5px;
 }
 
 .rhymer > textarea {
 	width: 100%;
+	padding: 20px;
+	border: none;
 	height: 400px;
+	resize: none;
 }
 
 .text-content {
@@ -184,8 +187,8 @@
 
 .output-box > .header > h2 {
 	display: inline;
-    margin-right: 15px;
-    font-family: 'Open Sans', sans-serif;
+	margin-right: 15px;
+	font-family: 'Open Sans', sans-serif;
 }
 
 h2 {
@@ -200,11 +203,9 @@ header.fixed {
 	top: 0;
 	left: 0;
 	width: 100%;
-    z-index: 1;
-	background-color: #5D804D;
-    background-image: linear-gradient(to bottom,#5D804D,#507141);
-	background-image: -webkit-linear-gradient(top,#5D804D,#507141);
-	background-image: -ms-linear-gradient(top,#5D804D,#507141);
+	z-index: 1;
+	background-color: #224612;
+	border-bottom: 4px solid #90af9f;
 	transition: height .2s ease;
 	-webkit-transition: height .2s ease;
 	-moz-transition: height .2s ease;
@@ -215,33 +216,33 @@ header.fixed {
 @media (min-width: 700px) {
 	.report-title {
 		font-size: 1.5em;
-		line-height: 36px;
+		line-height: 42px;
 	}
 	
 	header.fixed {
-		height: 36px;
+		height: 42px;
 	}
 	
 	header > #site-title {
 		font-size: 2em;
-		line-height: 36px;
+		line-height: 42px;
 	}
 	
 	#add-new-board-box > .menu-icon {
 		font-size: 2.5em;
-		line-height: 36px;
+		line-height: 42px;
 	}
 	
 	.options-menu.main-page-menu {
-		top: 40px;
+		top: 46px;
 	}
 	
 	#content-container {
-		margin-top: 47px;
+		margin-top: 53px;
 	}
 
 	.rhyme-zone {
-		top: 47px;
+		top: 53px;
 	}
 	
 	#left-rhyme {
@@ -253,42 +254,36 @@ header.fixed {
 	}
 }
 
-@media (max-width: 699px) {	
-	#add-new-board-box > .options-menu::before {
-		right: 3px;
-	}
-}
-
 @media (min-width: 476px) and (max-width: 699px) {
 	.report-title  {
 		font-size: 1.1em;
-		line-height: 31px;
+		line-height: 37px;
 	}
 
 	header.fixed {
-		height: 31px;
+		height: 37px;
 	}
 	
 	header > #site-title {
 		font-size: 1.5em;
-		line-height: 31px;
+		line-height: 37px;
 	}
 	
 	#add-new-board-box > .menu-icon {
 		font-size: 2.2em;
-		line-height: 31px;
+		line-height: 37px;
 	}
 	
 	.options-menu.main-page-menu {
-		top: 35px;
+		top: 41px;
 	}
 	
 	#content-container {
-		margin-top: 39px;
+		margin-top: 45px;
 	}
 
 	.rhyme-zone {
-		top: 39px;
+		top: 45px;
 		font-size: 0.8em;
 	}
 	
@@ -304,25 +299,25 @@ header.fixed {
 @media (max-width: 475px) {
 	.report-title {
 		font-size: 0.9em;
-		line-height: 26px;
+		line-height: 32px;
 	}
 	
 	header.fixed {
-		height: 26px;
+		height: 32px;
 	}
 	
 	header > #site-title {
 		font-size: 1.5em;
-		line-height: 26px;
+		line-height: 32px;
 	}
 	
 	#add-new-board-box > .menu-icon {
 		font-size: 2em;
-		line-height: 26px;
+		line-height: 32px;
 	}
 	
 	.options-menu.main-page-menu {
-		top: 31px;
+		top: 37px;
 	}
 	
 	.tooltip:hover::before{
@@ -355,11 +350,11 @@ header.fixed {
 	}
 	
 	#content-container {
-		margin-top: 31px;
+		margin-top: 37px;
 	}
 
 	.rhyme-zone {
-		top: 31px;
+		top: 37px;
 		font-size: 0.7em;
 	}
 	
@@ -909,7 +904,8 @@ a, a:visited {
 
 .report-legend {
 	top: 10%
-}
+}
+
 .left-side > .report-legend {
 	right: 51%;
 }
@@ -945,7 +941,8 @@ a, a:visited {
 @media (max-width: 900px) and (min-width: 475px) {
 	.report-total {
 		font-size: 0.7em;
-	}
+	}
+
 }
 
 
