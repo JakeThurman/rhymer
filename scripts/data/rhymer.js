@@ -41,7 +41,9 @@ define(["helperMethods"], function (helpers) {
 		window[callbackName] = callback;
 		
 		var script = document.createElement("script");
-		script.src = "http://rhymebrain.com/talk?function=getRhymes" +
+		var protocol = location.protocol === "file:" ? "http:" : location.protocol
+		
+		script.src = location.protocol + "//rhymebrain.com/talk?function=getRhymes" +
 			"&word=" + encodeURIComponent(word) +
 			"&maxResults=" + maxResults + 
 			"&jsonp=" + callbackName;
